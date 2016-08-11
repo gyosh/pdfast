@@ -1,3 +1,5 @@
+# About
+
 Estimate probability density function (pdf) using triangular kernel, in O(N + K).
 
 Where:
@@ -47,6 +49,7 @@ var pdf = pdfast.create(arr, options);
   { x: 10, y: 0 } ]
  */
 ```
+![pdf-chart][https://github.com/gyosh/pdfast/blob/master/res/sample.png?raw=true "PDF chart"]
 
 ## getExpectedValueFromPdf(pdf)
 
@@ -62,7 +65,7 @@ expect(
 ).closeTo(2.5, 1e-8);
 ```
 
-## getXWithLeftTailArea
+## getXWithLeftTailArea(pdf, area)
 
 ```js
 var pdf = [
