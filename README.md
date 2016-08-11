@@ -15,7 +15,7 @@ Create pdf with given array and options.
 
 Options:
 
-  * min: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r](described here).
+  * min: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [described here](http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r).
   * min: max value for the pdf's x range. If resulting pdf won't fit, the pdf's right will be squeezed.
   * size: number of bars to represent the pdf.
   * width: determine how many bar to the left and right does an element affect, similar to *bandwith* in kernel density estimation.
@@ -34,7 +34,6 @@ var pdf = pdfast.create(arr, options);
 
 `pdf`'s value:
 ```
-/*
 [ { x: 0, y: 0.020833333333333332 },
   { x: 0.9090909090909091, y: 0.0625 },
   { x: 1.8181818181818181, y: 0.10416666666666667 },
@@ -47,9 +46,8 @@ var pdf = pdfast.create(arr, options);
   { x: 8.181818181818182, y: 0.10416666666666667 },
   { x: 9.09090909090909, y: 0.041666666666666664 },
   { x: 10, y: 0 } ]
- */
 ```
-![pdf-chart][https://github.com/gyosh/pdfast/blob/master/res/sample.png?raw=true "PDF chart"]
+![PDF chart](https://raw.githubusercontent.com/gyosh/pdfast/master/res/sample.png "PDF chart")
 
 ## getExpectedValueFromPdf(pdf)
 
