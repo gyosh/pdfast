@@ -2,7 +2,7 @@
   "name": "pdfast",
   "version": "0.0.1",
   "description": "Fast kernel density estimation library",
-  "main": "index.js",
+  "main": "src/index.js",
   "keywords": [
     "pdf",
     "probabilty",
@@ -11,6 +11,11 @@
     "estimation",
     "kernel"
   ],
+  "repository": "gyosh/pdfast",
+  "bugs": {
+    "url": "https://github.com/gyosh/pdfast"
+  },
+  "homepage": "https://github.com/gyosh/pdfast",
   "scripts": {
     "test": "mocha --timeout 10000 $(find tests -name *.spec.js)"
   },
