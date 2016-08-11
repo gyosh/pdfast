@@ -1,6 +1,6 @@
 {
   "name": "pdfast",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Fast kernel density estimation library",
   "main": "index.js",
   "keywords": [
