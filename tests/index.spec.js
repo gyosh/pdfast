@@ -6,7 +6,7 @@ var _ = require('lodash');
 var rewire = require('rewire');
 var expect = require('chai').expect;
 
-var statisticUtil = rewire('../src');
+var pdfast = rewire('../src');
 
 describe('statistic util', function () {
   context('create', function () {
@@ -27,7 +27,7 @@ describe('statistic util', function () {
       ];
 
       it('should work', function () {
-        var result = statisticUtil.create(arr, {
+        var result = pdfast.create(arr, {
           width: 2,
           size: 10,
           min: 1,
@@ -47,24 +47,24 @@ describe('statistic util', function () {
       });
 
       it('should return empty array for empty input', function () {
-        var result = statisticUtil.create([], {width: 2, size: 10, fast: false});
+        var result = pdfast.create([], {width: 2, size: 10, fast: false});
         expect(result).to.deep.equal([]);
       });
 
       it('should return 100% accuracy pdf for homogen input', function () {
         expect(
-          statisticUtil.create([12, 12, 12], {width: 2, size: 10, fast: false})
+          pdfast.create([12, 12, 12], {width: 2, size: 10, fast: false})
         ).to.deep.equal([{x: 12, y: 1}]);
 
         expect(
-          statisticUtil.create([-1, -1, -1], {width: 2, size: 10, fast: false})
+          pdfast.create([-1, -1, -1], {width: 2, size: 10, fast: false})
         ).to.deep.equal([{x: -1, y: 1}]);
       });
     });
   });
 
   context('generatePartialAreas', function () {
-    var generatePartialAreas = statisticUtil.__get__('generatePartialAreas');
+    var generatePartialAreas = pdfast.__get__('generatePartialAreas');
     var mockFunction = function (x) {
       return Math.abs(x);
     };
@@ -91,17 +91,17 @@ describe('statistic util', function () {
   context('getExpectedValueFromPdf', function () {
     it('should return undefined for empty pdf', function () {
       expect(
-        statisticUtil.getExpectedValueFromPdf([])
+        pdfast.getExpectedValueFromPdf([])
       ).equal(undefined);
     });
 
     it('should return expected value for typical pdf', function () {
       expect(
-        statisticUtil.getExpectedValueFromPdf([{x: 12, y: 1}])
+        pdfast.getExpectedValueFromPdf([{x: 12, y: 1}])
       ).equal(12);
 
       expect(
-        statisticUtil.getExpectedValueFromPdf([
+        pdfast.getExpectedValueFromPdf([
           {x: 1, y: 0.2},
           {x: 2, y: 0.4},
           {x: 3, y: 0.3},
@@ -115,17 +115,17 @@ describe('statistic util', function () {
   context('getXWithLeftTailArea', function () {
     it('should return undefined for empty pdf', function () {
       expect(
-        statisticUtil.getXWithLeftTailArea([], 12)
+        pdfast.getXWithLeftTailArea([], 12)
       ).equal(undefined);
     });
 
     it('should return the only x for any area for 100% accuracy pdf', function () {
       var pdf = [{x: 12, y: 1}];
 
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0)).equal(12);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.5)).equal(12);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.8)).equal(12);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 1)).equal(12);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0)).equal(12);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.5)).equal(12);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.8)).equal(12);
+      expect(pdfast.getXWithLeftTailArea(pdf, 1)).equal(12);
     });
 
     it('should return x position where left tail area equals given param', function () {
@@ -137,12 +137,12 @@ describe('statistic util', function () {
         {x: 5, y: 0.025}
       ];
 
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0)).equal(1);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.12)).equal(1);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.19)).equal(1);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.21)).equal(2);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 0.95)).equal(4);
-      expect(statisticUtil.getXWithLeftTailArea(pdf, 1)).equal(5);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0)).equal(1);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.12)).equal(1);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.19)).equal(1);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.21)).equal(2);
+      expect(pdfast.getXWithLeftTailArea(pdf, 0.95)).equal(4);
+      expect(pdfast.getXWithLeftTailArea(pdf, 1)).equal(5);
     });
   });
 });

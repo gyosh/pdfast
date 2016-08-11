@@ -74,12 +74,12 @@ var pdf = [
   {x: 5, y: 0.025}
 ];
 
-expect(statisticUtil.getXWithLeftTailArea(pdf, 0)).equal(1);
-expect(statisticUtil.getXWithLeftTailArea(pdf, 0.12)).equal(1);
-expect(statisticUtil.getXWithLeftTailArea(pdf, 0.19)).equal(1);
-expect(statisticUtil.getXWithLeftTailArea(pdf, 0.21)).equal(2);
-expect(statisticUtil.getXWithLeftTailArea(pdf, 0.95)).equal(4);
-expect(statisticUtil.getXWithLeftTailArea(pdf, 1)).equal(5);
+expect(pdfast.getXWithLeftTailArea(pdf, 0)).equal(1);
+expect(pdfast.getXWithLeftTailArea(pdf, 0.12)).equal(1);
+expect(pdfast.getXWithLeftTailArea(pdf, 0.19)).equal(1);
+expect(pdfast.getXWithLeftTailArea(pdf, 0.21)).equal(2);
+expect(pdfast.getXWithLeftTailArea(pdf, 0.95)).equal(4);
+expect(pdfast.getXWithLeftTailArea(pdf, 1)).equal(5);
 ```
 
 # License
