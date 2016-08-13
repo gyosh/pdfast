@@ -1,11 +1,11 @@
 # About
 
-Kernel Density Estimation, generating probability density function (pdf) using triangular kernel, in O(N + K).
+Kernel Density Estimation, generating probability density function (pdf) using triangular kernel, optimized to run in O(N + K).
 
 Where:
 
-  * N: number of element in the sample.
-  * K: number of bars to represent the pdf.
+  * N: number of elements in the sample.
+  * K: number of points to represent the pdf.
 
 # API
 
@@ -15,10 +15,10 @@ Create pdf with given array and options.
 
 Options:
 
-  * min: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [described here](http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r). Defaults to smallest value in the array minus some threshold.
-  * min: max value for the pdf's x range. If resulting pdf won't fit, the pdf's right will be squeezed. Defaults to largest value in the array plus some threshold.
-  * size: number of bars to represent the pdf. Defaults to 50.
-  * width: determine how many bar to the left and right does an element affect, similar to *bandwith* in kernel density estimation. Defaults to 2.
+  * `min`: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [described here](http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r). Defaults to smallest value in the array minus some threshold.
+  * `max`: max value for the pdf's x range. If resulting pdf won't fit, the pdf's right will be squeezed. Defaults to largest value in the array plus some threshold.
+  * `size`: number of bars to represent the pdf. Defaults to 50.
+  * `width`: determine how many points to the left and right does an element affect, similar to *bandwith* in kernel density estimation. Defaults to 2.
 
 ```js
 var arr = [1, 2, 3, 3, 4, 5, 5, 5, 6, 8, 9, 9];
@@ -47,7 +47,6 @@ var pdf = pdfast.create(arr, options);
   { x: 9.09090909090909, y: 0.041666666666666664 },
   { x: 10, y: 0 } ]
 ```
-![PDF chart](https://raw.githubusercontent.com/gyosh/pdfast/master/res/sample.png "PDF chart")
 
 ## getExpectedValueFromPdf(pdf)
 
