@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/gyosh/pdfast.svg)](https://travis-ci.org/gyosh/pdfast)
+[![npm version](https://badge.fury.io/js/pdfast.svg)](https://badge.fury.io/js/pdfast)
+
 # About
 
 Kernel Density Estimation, generating probability density function (pdf) using triangular kernel, optimized to run in O(N + K).
