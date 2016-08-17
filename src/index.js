@@ -70,6 +70,11 @@ module.exports.create = function (arr, options) {
   arr.forEach(function (x) {
     var bucket = xToBucket(x);
 
+    // Totally outside?
+    if ((bucket + width < 0) || (bucket - width >= buckets.length)) {
+      return;
+    }
+
     var start = Math.max(bucket - width, 0);
     var mid = bucket;
     var end = Math.min(bucket + width, buckets.length - 1);
@@ -86,13 +91,13 @@ module.exports.create = function (arr, options) {
 
     // Add grads
     var startGradPos = Math.max(0, bucket-width+1);
-    if (startGradPos < buckets.length) {
+    if (helper.inside(0, buckets.length-1, startGradPos)) {
       buckets[startGradPos].y += weight * 1 * c;
     }
-    if (mid + 1 < buckets.length) {
+    if (helper.inside(0, buckets.length-1, mid + 1)) {
       buckets[mid + 1].y -= weight * 2 * c;
     }
-    if (end + 1 < buckets.length) {
+    if (helper.inside(0, buckets.length-1, end + 1)) {
       buckets[end + 1].y += weight * 1 * c;
     }
   });
@@ -108,9 +113,12 @@ module.exports.create = function (arr, options) {
     area += accumulator;
   });
 
-  buckets.forEach(function (bucket) {
-    bucket.y /= area;
-  });
+  // Normalize
+  if (area > 0) {
+    buckets.forEach(function (bucket) {
+      bucket.y /= area;
+    });
+  }
 
   return buckets;
 };

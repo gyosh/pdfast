@@ -19,3 +19,7 @@ module.exports.findMax = function (arr) {
   }
   return curr;
 };
+
+module.exports.inside = function (min, max, x) {
+  return (min <= x) && (x <= max);
+};

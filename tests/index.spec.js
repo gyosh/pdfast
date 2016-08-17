@@ -31,8 +31,7 @@ describe('statistic util', function () {
           width: 2,
           size: 10,
           min: 1,
-          max: 12,
-          kernel: 'triangle'
+          max: 12
         });
 
         var sum = _.reduce(result, function (acc, item) {
@@ -59,6 +58,32 @@ describe('statistic util', function () {
         expect(
           pdfast.create([-1, -1, -1], {width: 2, size: 10, fast: false})
         ).to.deep.equal([{x: -1, y: 1}]);
+      });
+    });
+
+    context('general corner cases', function () {
+      context('pdf area is 0, because hit is always outside', function () {
+        var expected = [
+          { x: 101, y: 0 },
+          { x: 102, y: 0 },
+          { x: 103, y: 0 },
+          { x: 104, y: 0 },
+          { x: 105, y: 0 }
+        ];
+
+        it('should work', function () {
+          var result = pdfast.create(arr, {
+            width: 2,
+            size: 5,
+            min: 101,
+            max: 105
+          });
+
+          result.forEach(function (item, i) {
+            expect(item.x).closeTo(expected[i].x, EPS);
+            expect(item.y).closeTo(expected[i].y, EPS);
+          });
+        });
       });
     });
   });
