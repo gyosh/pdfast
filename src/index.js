@@ -3,6 +3,8 @@
 var DEFAULT_SIZE = 50;
 var DEFAULT_WIDTH = 2;
 
+var LN_2 = Math.log(2);
+
 var helper = require('./helper');
 
 // Triangle
@@ -156,4 +158,22 @@ module.exports.getXWithLeftTailArea = function (pdf, area) {
   }
 
   return pdf[last].x;
+};
+
+module.exports.getPerplexity = function (pdf) {
+  if (!pdf || (pdf.length === 0)) {
+    return undefined;
+  }
+
+  var entropy = 0;
+  pdf.forEach(function (obj) {
+    var ln = Math.log(obj.y);
+
+    if (isFinite(ln)) {
+      entropy += obj.y * ln;
+    }
+  });
+  entropy = -entropy / LN_2;
+
+  return Math.pow(2, entropy);
 };

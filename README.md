@@ -20,7 +20,7 @@ Options:
 
   * `min`: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [described here](http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r). Defaults to smallest value in the array minus some threshold.
   * `max`: max value for the pdf's x range. If resulting pdf won't fit, the pdf's right will be squeezed. Defaults to largest value in the array plus some threshold.
-  * `size`: number of bars to represent the pdf. Defaults to 50.
+  * `size`: number of points to represent the pdf. Defaults to 50.
   * `width`: determine how many points to the left and right does an element affect, similar to *bandwith* in kernel density estimation. Defaults to 2.
 
 ```js
@@ -82,6 +82,20 @@ expect(pdfast.getXWithLeftTailArea(pdf, 0.19)).equal(1);
 expect(pdfast.getXWithLeftTailArea(pdf, 0.21)).equal(2);
 expect(pdfast.getXWithLeftTailArea(pdf, 0.95)).equal(4);
 expect(pdfast.getXWithLeftTailArea(pdf, 1)).equal(5);
+```
+
+## getPerplexity(pdf)
+
+```js
+expect(
+  pdfast.getPerplexity([
+    {x: 1, y: 0.2},
+    {x: 2, y: 0.4},
+    {x: 3, y: 0.3},
+    {x: 4, y: 0.075},
+    {x: 5, y: 0.025}
+  ])
+).closeTo(3.8041316039860336, EPS);
 ```
 
 # License

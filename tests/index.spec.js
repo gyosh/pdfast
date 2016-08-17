@@ -1,6 +1,6 @@
 'use strict';
 
-var EPS = 1e-3;
+var EPS = 1e-8;
 
 var _ = require('lodash');
 var rewire = require('rewire');
@@ -108,7 +108,7 @@ describe('statistic util', function () {
           {x: 4, y: 0.075},
           {x: 5, y: 0.025}
         ])
-      ).equal(2.3249999999999997);
+      ).closeTo(2.3249999999999997, EPS);
     });
   });
 
@@ -145,5 +145,43 @@ describe('statistic util', function () {
       expect(pdfast.getXWithLeftTailArea(pdf, 1)).equal(5);
     });
   });
-});
 
+  context('getPerplexity', function () {
+    it('should return undefined for empty pdf', function () {
+      expect(pdfast.getPerplexity([])).equal(undefined);
+      expect(pdfast.getPerplexity(undefined)).equal(undefined);
+      expect(pdfast.getPerplexity(null)).equal(undefined);
+    });
+
+    it('should return correct perplexity', function () {
+      expect(
+        pdfast.getPerplexity([
+          {x: 1, y: 0.2},
+          {x: 2, y: 0.2},
+          {x: 3, y: 0.2},
+          {x: 4, y: 0.2},
+          {x: 5, y: 0.2}
+        ])
+      ).closeTo(5, EPS);
+
+      expect(
+        pdfast.getPerplexity([
+          {x: 1, y: 0.2},
+          {x: 2, y: 0.4},
+          {x: 3, y: 0.3},
+          {x: 4, y: 0.075},
+          {x: 5, y: 0.025}
+        ])
+      ).closeTo(3.8041316039860336, EPS);
+
+      expect(
+        pdfast.getPerplexity([
+          {x: 1, y: 0},
+          {x: 2, y: 0},
+          {x: 3, y: 1},
+          {x: 4, y: 0}
+        ])
+      ).closeTo(1, EPS);
+    });
+  });
+});
