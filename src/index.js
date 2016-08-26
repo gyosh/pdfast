@@ -14,12 +14,16 @@ function kernel(x) {
 }
 
 /**
- * Get min and max value for the pdf, covering all arrMulti data range while respecting options' data
- * @param arrMulti
+ * Get min and max value for the pdf, covering all arr data range while respecting options' data
+ * @param arr
  * @param options
  * @returns {*}
  */
-module.exports.getUnifiedMinMax = function (arrMulti, options) {
+module.exports.getUnifiedMinMax = function (arr, options) {
+  return self.getUnifiedMinMaxMulti([arr], options);
+};
+
+module.exports.getUnifiedMinMaxMulti = function (arrMulti, options) {
   options = options || {};
 
   var relaxMin = false;
@@ -38,7 +42,7 @@ module.exports.getUnifiedMinMax = function (arrMulti, options) {
     min = min - 2 * width * step;
   }
   if (relaxMax) {
-    max = max - 2 * width * step;
+    max = max + 2 * width * step;
   }
 
   return {
@@ -56,7 +60,7 @@ module.exports.create = function (arr, options) {
 
   var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
   var width = helper.isNumber(options.width) ? options.width : DEFAULT_WIDTH;
-  var normalizedMinMax = self.getUnifiedMinMax([arr], {
+  var normalizedMinMax = self.getUnifiedMinMax(arr, {
     size: size,
     width: width,
     min: options.min,
@@ -138,15 +142,12 @@ module.exports.create = function (arr, options) {
     area += accumulator;
   });
 
-  // No hit?
-  if (area === 0) {
-    return [];
-  }
-
   // Normalize
-  buckets.forEach(function (bucket) {
-    bucket.y /= area;
-  });
+  if (area > 0) {
+    buckets.forEach(function (bucket) {
+      bucket.y /= area;
+    });
+  }
 
   return buckets;
 };

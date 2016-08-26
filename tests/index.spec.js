@@ -88,6 +88,66 @@ describe('statistic util', function () {
     });
   });
 
+  context('getUnifiedMinMax', function () {
+    context('min and max exist', function () {
+      it('should return defined min max', function () {
+        expect(pdfast.getUnifiedMinMax([1, 2, 3], {min: -10, max: 10, width: 2, size: 20})).deep.equal({min: -10, max: 10});
+        expect(pdfast.getUnifiedMinMax([1, 2, 3], {min: -5, max: 15, width: 2, size: 20})).deep.equal({min: -5, max: 15});
+      });
+    });
+
+    context('only min exist', function () {
+      it('should return defined min and find the max', function () {
+        expect(pdfast.getUnifiedMinMax([1, 2, 3], {min: 0, width: 2, size: 4})).deep.equal({min: 0, max: 7});
+        expect(pdfast.getUnifiedMinMax([1, 2, 3, 4], {min: -1, width: 2, size: 5})).deep.equal({min: -1, max: 9});
+      });
+    });
+
+    context('only max exist', function () {
+      it('should return defined max and find the min', function () {
+        expect(pdfast.getUnifiedMinMax([1, 2, 3], {max: 4, width: 2, size: 4})).deep.equal({min: -3, max: 4});
+        expect(pdfast.getUnifiedMinMax([1, 2, 3, 4], {max: 6, width: 2, size: 5})).deep.equal({min: -4, max: 6});
+      });
+    });
+
+    context('no min or max exist', function () {
+      it('should return defined max and find the min', function () {
+        expect(pdfast.getUnifiedMinMax([1, 2, 3], {width: 2, size: 3})).deep.equal({min: -3, max: 7});
+        expect(pdfast.getUnifiedMinMax([1, 2, 3, 4], {width: 2, size: 5})).deep.equal({min: -2, max: 7});
+      });
+    });
+  });
+
+  context('getUnifiedMinMaxMulti', function () {
+    context('min and max exist', function () {
+      it('should return defined min max', function () {
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 2, 3], [2, 5]], {min: -10, max: 10, width: 2, size: 20})).deep.equal({min: -10, max: 10});
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 2, 3], [2, 5]], {min: -5, max: 15, width: 2, size: 20})).deep.equal({min: -5, max: 15});
+      });
+    });
+
+    context('only min exist', function () {
+      it('should return defined min and find the max', function () {
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 2, 3], [0, 1]], {min: 0, width: 2, size: 4})).deep.equal({min: 0, max: 7});
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 2, 3], [2, 3], [0, 4]], {min: -1, width: 2, size: 5})).deep.equal({min: -1, max: 9});
+      });
+    });
+
+    context('only max exist', function () {
+      it('should return defined max and find the min', function () {
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 2], [2, 3]], {max: 4, width: 2, size: 4})).deep.equal({min: -3, max: 4});
+        expect(pdfast.getUnifiedMinMaxMulti([[3, 4], [1], [2, 6]], {max: 6, width: 2, size: 5})).deep.equal({min: -4, max: 6});
+      });
+    });
+
+    context('no min or max exist', function () {
+      it('should return defined max and find the min', function () {
+        expect(pdfast.getUnifiedMinMaxMulti([[1], [2, 3], [2]], {width: 2, size: 3})).deep.equal({min: -3, max: 7});
+        expect(pdfast.getUnifiedMinMaxMulti([[1, 4], [1, 2, 3, 4]], {width: 2, size: 5})).deep.equal({min: -2, max: 7});
+      });
+    });
+  });
+
   context('generatePartialAreas', function () {
     var generatePartialAreas = pdfast.__get__('generatePartialAreas');
     var mockFunction = function (x) {
