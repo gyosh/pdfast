@@ -4,6 +4,7 @@ var DEFAULT_SIZE = 50;
 var DEFAULT_WIDTH = 2;
 
 var LN_2 = Math.log(2);
+var self = module.exports;
 
 var helper = require('./helper');
 
@@ -12,27 +13,25 @@ function kernel(x) {
   return 1 - Math.abs(x);
 }
 
-module.exports.create = function (arr, options) {
+/**
+ * Get min and max value for the pdf, covering all arrMulti data range while respecting options' data
+ * @param arrMulti
+ * @param options
+ * @returns {*}
+ */
+module.exports.getUnifiedMinMax = function (arrMulti, options) {
   options = options || {};
-
-  if (!arr || (arr.length === 0)) {
-    return [];
-  }
 
   var relaxMin = false;
   var relaxMax = false;
 
-  var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
   var width = helper.isNumber(options.width) ? options.width : DEFAULT_WIDTH;
-  var min = helper.isNumber(options.min) ? options.min : (relaxMin = true, helper.findMin(arr));
-  var max = helper.isNumber(options.max) ? options.max : (relaxMax = true, helper.findMax(arr));
+  var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
+  var min = helper.isNumber(options.min) ? options.min : (relaxMin = true, helper.findMinMulti(arrMulti));
+  var max = helper.isNumber(options.max) ? options.max : (relaxMax = true, helper.findMaxMulti(arrMulti));
 
   var range = max - min;
   var step = range / (size - 1);
-  if (range === 0) {
-    // Special case...
-    return [{x: min, y: 1}];
-  }
 
   // Relax?
   if (relaxMin) {
@@ -42,10 +41,36 @@ module.exports.create = function (arr, options) {
     max = max - 2 * width * step;
   }
 
-  // Recompute?
-  if (relaxMin || relaxMax) {
-    range = max - min;
-    step = range / (size - 1);
+  return {
+    min: min,
+    max: max
+  };
+};
+
+module.exports.create = function (arr, options) {
+  options = options || {};
+
+  if (!arr || (arr.length === 0)) {
+    return [];
+  }
+
+  var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
+  var width = helper.isNumber(options.width) ? options.width : DEFAULT_WIDTH;
+  var normalizedMinMax = self.getUnifiedMinMax([arr], {
+    size: size,
+    width: width,
+    min: options.min,
+    max: options.max
+  });
+
+  var min = normalizedMinMax.min;
+  var max = normalizedMinMax.max;
+
+  var range = max - min;
+  var step = range / (size - 1);
+  if (range === 0) {
+    // Special case...
+    return [{x: min, y: 1}];
   }
 
   // Good to go
@@ -113,12 +138,15 @@ module.exports.create = function (arr, options) {
     area += accumulator;
   });
 
-  // Normalize
-  if (area > 0) {
-    buckets.forEach(function (bucket) {
-      bucket.y /= area;
-    });
+  // No hit?
+  if (area === 0) {
+    return [];
   }
+
+  // Normalize
+  buckets.forEach(function (bucket) {
+    bucket.y /= area;
+  });
 
   return buckets;
 };
