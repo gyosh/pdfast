@@ -4,6 +4,7 @@ var DEFAULT_SIZE = 50;
 var DEFAULT_WIDTH = 2;
 
 var LN_2 = Math.log(2);
+var self = module.exports;
 
 var helper = require('./helper');
 
@@ -12,6 +13,44 @@ function kernel(x) {
   return 1 - Math.abs(x);
 }
 
+/**
+ * Get min and max value for the pdf, covering all arr data range while respecting options' data
+ * @param arr
+ * @param options
+ * @returns {*}
+ */
+module.exports.getUnifiedMinMax = function (arr, options) {
+  return self.getUnifiedMinMaxMulti([arr], options);
+};
+
+module.exports.getUnifiedMinMaxMulti = function (arrMulti, options) {
+  options = options || {};
+
+  var relaxMin = false;
+  var relaxMax = false;
+
+  var width = helper.isNumber(options.width) ? options.width : DEFAULT_WIDTH;
+  var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
+  var min = helper.isNumber(options.min) ? options.min : (relaxMin = true, helper.findMinMulti(arrMulti));
+  var max = helper.isNumber(options.max) ? options.max : (relaxMax = true, helper.findMaxMulti(arrMulti));
+
+  var range = max - min;
+  var step = range / (size - 1);
+
+  // Relax?
+  if (relaxMin) {
+    min = min - 2 * width * step;
+  }
+  if (relaxMax) {
+    max = max + 2 * width * step;
+  }
+
+  return {
+    min: min,
+    max: max
+  };
+};
+
 module.exports.create = function (arr, options) {
   options = options || {};
 
@@ -19,33 +58,23 @@ module.exports.create = function (arr, options) {
     return [];
   }
 
-  var relaxMin = false;
-  var relaxMax = false;
-
   var size = helper.isNumber(options.size) ? options.size : DEFAULT_SIZE;
   var width = helper.isNumber(options.width) ? options.width : DEFAULT_WIDTH;
-  var min = helper.isNumber(options.min) ? options.min : (relaxMin = true, helper.findMin(arr));
-  var max = helper.isNumber(options.max) ? options.max : (relaxMax = true, helper.findMax(arr));
+  var normalizedMinMax = self.getUnifiedMinMax(arr, {
+    size: size,
+    width: width,
+    min: options.min,
+    max: options.max
+  });
+
+  var min = normalizedMinMax.min;
+  var max = normalizedMinMax.max;
 
   var range = max - min;
   var step = range / (size - 1);
   if (range === 0) {
     // Special case...
     return [{x: min, y: 1}];
-  }
-
-  // Relax?
-  if (relaxMin) {
-    min = min - 2 * width * step;
-  }
-  if (relaxMax) {
-    max = max - 2 * width * step;
-  }
-
-  // Recompute?
-  if (relaxMin || relaxMax) {
-    range = max - min;
-    step = range / (size - 1);
   }
 
   // Good to go
