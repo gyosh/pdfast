@@ -100,16 +100,14 @@ expect(
 
 ## getUnifiedMinMax(arr, options)
 
-Takes the same options as `create`.
-Returns an object with key `min` and `max.
+Takes the same options as `create`. Returns an object with key `min` and `max`.
 
-If you left `min` or `max` or both to be falsey, it will be filled with number which will fit the data distribution.
+If you left `min` or `max` or both to be non number, it will be filled with number which will fit the data distribution.
 
 ## getUnifiedMinMaxMulti([arr1, arr2, ...], options)
 
-Similar with `getUnifiedMinMax`, but takes list of arrays.
+Similar with `getUnifiedMinMax`, but takes list of arrays. The generated `min` and/or `max` will fit all the arrays' distribution.
 
-The generated `min` and `max` will fit all the arrays' distribution.
 Useful when trying to generate pdf for multiple labelled data and want to display them in the same chart. With same `min` and `max`, one can combine the pdf correctly.
 
 # License
