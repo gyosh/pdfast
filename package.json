@@ -5,11 +5,13 @@
   "main": "src/index.js",
   "keywords": [
     "pdf",
+    "kde",
     "probabilty",
     "density",
     "function",
     "estimation",
-    "kernel"
+    "kernel",
+    "estimator"
   ],
   "repository": "gyosh/pdfast",
   "bugs": {

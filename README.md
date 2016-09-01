@@ -21,7 +21,7 @@ Options:
   * `min`: min value for the pdf's x range. If resulting pdf won't fit, the pdf's left part will be squeezed, as [described here](http://stats.stackexchange.com/questions/65866/good-methods-for-density-plots-of-non-negative-variables-in-r). Defaults to smallest value in the array minus some threshold.
   * `max`: max value for the pdf's x range. If resulting pdf won't fit, the pdf's right will be squeezed. Defaults to largest value in the array plus some threshold.
   * `size`: number of points to represent the pdf. Defaults to 50.
-  * `width`: determine how many points to the left and right does an element affect, similar to *bandwith* in kernel density estimation. Defaults to 2.
+  * `width`: determine how many points to the left and right does an element affect, similar to *bandwidth* in kernel density estimation. Defaults to 2.
 
 ```js
 var arr = [1, 2, 3, 3, 4, 5, 5, 5, 6, 8, 9, 9];
@@ -97,6 +97,20 @@ expect(
   ])
 ).closeTo(3.8041316039860336, EPS);
 ```
+
+## getUnifiedMinMax(arr, options)
+
+Takes the same options as `create`.
+Returns an object with key `min` and `max.
+
+If you left `min` or `max` or both to be falsey, it will be filled with number which will fit the data distribution.
+
+## getUnifiedMinMaxMulti([arr1, arr2, ...], options)
+
+Similar with `getUnifiedMinMax`, but takes list of arrays.
+
+The generated `min` and `max` will fit all the arrays' distribution.
+Useful when trying to generate pdf for multiple labelled data and want to display them in the same chart. With same `min` and `max`, one can combine the pdf correctly.
 
 # License
 MIT
